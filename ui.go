@@ -35,8 +35,8 @@ func initIndexPage(app *tview.Application) {
 	indexList = tview.NewList()
 	indexList.
 		SetBorder(true).
-		SetBorderAttributes(tcell.AttrNone).
-		SetBorderPadding(1, 1, 1, 1).
+		SetBorderColor(tcell.Color20).
+		SetBorderAttributes(tcell.AttrUnderline).
 		SetTitle("  Welcome to New World  ").
 		SetTitleColor(tcell.ColorPink)
 
@@ -46,9 +46,9 @@ func initIndexPage(app *tview.Application) {
 
 	indexList.SetSelectedFunc(func(index int, _ string, _ string, _ rune) {
 		contentList.Clear()
-		currentContentList = indexListSourceData[index].contentList
+		currentContentList = indexListSourceData[index].ContentList
 		for _, v := range currentContentList {
-			contentList.AddItem(v.title, "", 0, nil)
+			contentList.AddItem(v.Title, "", 0, nil)
 		}
 		pages.SwitchToPage("contentPage")
 
@@ -70,7 +70,7 @@ func initIndexPage(app *tview.Application) {
 func initContentPage(app *tview.Application) {
 
 	contentList = tview.NewList().SetSelectedBackgroundColor(tcell.ColorPink)
-	contentList.SetBorderPadding(1, 1, 1, 1)
+	contentList.SetBorderPadding(0, 0, 0, 0)
 
 	contentList.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Rune() {
@@ -82,7 +82,7 @@ func initContentPage(app *tview.Application) {
 				inputValue := inputContentView.GetText()
 				if key == tcell.KeyEnter {
 					if 0 != len(inputValue) {
-						currentContentList = append(currentContentList, ContentListSourceDataType{title: inputValue, ID: len(currentContentList) + 1})
+						currentContentList = append(currentContentList, ContentListSourceDataType{Title: inputValue, ID: len(currentContentList) + 1})
 						contentList.AddItem(inputValue, "", 0, nil)
 					}
 					contentPageLeft.RemoveItem(inputContentView)
@@ -101,7 +101,7 @@ func initContentPage(app *tview.Application) {
 	contentList.SetSelectedFunc(func(index int, _ string, _ string, _ rune) {
 		msgList.Clear()
 		app.SetFocus(msgList)
-		currentContentData = currentContentList[index].msg
+		currentContentData = currentContentList[index].Msg
 		for _, v := range currentContentData {
 			msgList.AddItem(v, "", 0, nil)
 			contentPageRight.AddItem(msgList, 0, 1, true)
